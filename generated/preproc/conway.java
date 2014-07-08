@@ -1,29 +1,48 @@
+import processing.core.*; 
+import processing.xml.*; 
+
+import java.applet.*; 
+import java.awt.Dimension; 
+import java.awt.Frame; 
+import java.awt.event.MouseEvent; 
+import java.awt.event.KeyEvent; 
+import java.awt.event.FocusEvent; 
+import java.awt.Image; 
+import java.io.*; 
+import java.net.*; 
+import java.text.*; 
+import java.util.*; 
+import java.util.zip.*; 
+import java.util.regex.*; 
+
+public class conway extends PApplet {
+
 int gridHeightAndWidth = 300;
 int boxSize = 3;
 
 Cell[][] grid = new Cell[gridHeightAndWidth][gridHeightAndWidth];
 
-void setup() {
+public void setup() {
   size(gridHeightAndWidth * boxSize, gridHeightAndWidth * boxSize);
   frameRate(30);
   generateRandomGrid();
 }
 
-void generateRandomGrid() {
+public void generateRandomGrid() {
   for (int i = 0; i < gridHeightAndWidth; i++) {
     for (int j = 0; j < gridHeightAndWidth; j++) {
-      grid[i][j] = new Cell(i, j, random(1) > 0.1);
+      grid[i][j] = new Cell(i, j, random(1) > 0.1f);
     }
   }
 }
 
-void draw() {
+public void draw() {
     background(255);
     for (int i = 0; i < gridHeightAndWidth; i++) {
       for (int j = 0; j < gridHeightAndWidth; j++) {
         noStroke();
         Cell cell = grid[i][j];
-        if (cell.isAlive()) {
+        if (cell.isLit()) {
           fill(255);
         } else {
           fill(0);
@@ -34,32 +53,32 @@ void draw() {
     updateGrid();
 }
 
-void updateGrid() {
+public void updateGrid() {
   for (int i = 0; i < gridHeightAndWidth; i++) {
     for (int j = 0; j < gridHeightAndWidth; j++) {
       Cell cell = grid[i][j];
       ArrayList<Cell> neighbours = getSurroundingCells(cell);
-      if (cell.isAlive()) {
+      if (cell.isLit()) {
         if (neighbours.size() < 2 || neighbours.size() > 3) {
-          cell.setAlive(false);
+          cell.setLit(false);
         }
       } else {
         if (neighbours.size() == 3) {
-          cell.setAlive(true);
+          cell.setLit(true);
         }
       }
     }
   }
 }
 
-ArrayList<Cell> getSurroundingCells(Cell baseCell) {
+public ArrayList<Cell> getSurroundingCells(Cell baseCell) {
   ArrayList<Cell> neighbours = new ArrayList<Cell>();
   IntList xInRange = getCoordsInRange(baseCell.getX());
   IntList yInRange = getCoordsInRange(baseCell.getY());
   for (int x : xInRange) {
     for (int y : yInRange) {
       Cell neighbour = grid[x][y];
-      if (neighbour.isAlive()) {
+      if (neighbour.isLit()) {
         neighbours.add(neighbour);
       }
     }
@@ -67,7 +86,7 @@ ArrayList<Cell> getSurroundingCells(Cell baseCell) {
   return neighbours;
 }
 
-IntList getCoordsInRange(int baseCoord) {
+public IntList getCoordsInRange(int baseCoord) {
   IntList coordsInRange = new IntList();
   if (baseCoord + 1 < gridHeightAndWidth) {
     coordsInRange.append(baseCoord + 1);
@@ -81,12 +100,12 @@ IntList getCoordsInRange(int baseCoord) {
 class Cell {
   int x;
   int y;
-  boolean alive;
+  boolean lit;
   
-  public Cell(int x, int y, boolean alive) {
+  public Cell(int x, int y, boolean lit) {
     this.x = x;
     this.y = y;
-    this.alive = alive;
+    this.lit = lit;
   } 
   
   public int getX() {
@@ -105,11 +124,16 @@ class Cell {
     this.y = y;
   }
   
-  public boolean isAlive() {
-    return alive;
+  public boolean isLit() {
+    return lit;
   }
   
-  public void setAlive(boolean alive) {
-    this.alive = alive;
+  public void setLit(boolean lit) {
+    this.lit = lit;
   }
+}
+
+    static public void main(String args[]) {
+        PApplet.main(new String[] { "--bgcolor=#ECE9D8", "conway" });
+    }
 }
