@@ -18,20 +18,20 @@ void generateRandomGrid() {
 }
 
 void draw() {
-    background(255);
-    for (int i = 0; i < gridHeightAndWidth; i++) {
-      for (int j = 0; j < gridHeightAndWidth; j++) {
-        noStroke();
-        Cell cell = grid[i][j];
-        if (cell.isAlive()) {
-          fill(255);
-        } else {
-          fill(0);
-        }
-        rect(i * boxSize, j * boxSize, boxSize, boxSize);
+  background(255);
+  for (int i = 0; i < gridHeightAndWidth; i++) {
+    for (int j = 0; j < gridHeightAndWidth; j++) {
+      noStroke();
+      Cell cell = grid[i][j];
+      if (cell.isAlive()) {
+        fill(255);
+      } else {
+        fill(0);
       }
+      rect(i * boxSize, j * boxSize, boxSize, boxSize);
     }
-    updateGrid();
+  }
+  updateGrid();
 }
 
 void updateGrid() {
