@@ -1,9 +1,12 @@
 int gridHeightAndWidth = 300;
 int boxSize = 3;
+int frameCount;
+int frameLimit = 50;
 
 Cell[][] grid = new Cell[gridHeightAndWidth][gridHeightAndWidth];
 
 void setup() {
+  frameCount = 0;
   size(gridHeightAndWidth * boxSize, gridHeightAndWidth * boxSize);
   frameRate(30);
   generateRandomGrid();
@@ -32,6 +35,14 @@ void draw() {
     }
   }
   updateGrid();
+  updateOrResetFrameCount();
+}
+
+void updateOrResetFrameCount() {
+  frameCount++;
+  if (frameCount == frameLimit) {
+    setup();
+  }
 }
 
 void updateGrid() {
